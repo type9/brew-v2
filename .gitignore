@@ -1,2 +1,5 @@
 .env
 .pytest_cache/*
+cocktail_checklist.txt
+cocktail_list.txt
+cocktails.txt
