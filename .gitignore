@@ -1,5 +1,4 @@
 .env
-.pytest_cache/*
-cocktail_list.txt
-cocktail_checklist.txt
-cocktails.txt
+
+# data-stripper
+data/*

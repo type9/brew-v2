@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 
 from sys import stdout
+from pathlib import Path
 import os, time, signal, requests, json
 
 load_dotenv()
@@ -9,8 +10,16 @@ class CocktailDownloader():
     '''Utilizes thecocktaildb.com to download all cocktail data'''
     def __init__(self, request_msbuffer=0, retries=5):
         self.key = os.getenv("COCKTAILDB_API_KEY")
+
+        # request configuration
         self.msbuffer = request_msbuffer
         self.retries = retries
+
+        # directory configuration
+        self.dir = Path("data")
+        self.cocktail_list = self.dir / 'cocktail_list.txt'
+        self.cocktail_checklist = self.dir / 'cocktail_checklist.txt'
+        self.cocktail_data = self.dir / 'cocktail_data.txt'
 
     def get_cocktail_list(self):
         '''Gets list of all cocktails'''
@@ -31,7 +40,7 @@ class CocktailDownloader():
             list.append(drink)
             count += 1
 
-        with open('cocktail_list.txt', 'w') as outfile:
+        with open(self.cocktail_list, 'w') as outfile:
             json.dump(list, outfile)
         
         print(f'[CocktailDownloader]Added {count} drink(s) to list')
@@ -45,17 +54,17 @@ class CocktailDownloader():
         # This block checks for the existence of the needed files.
         cocktail_list = [] # stores the list of cocktails we need to find
         try: 
-            with open('cocktail_list.txt') as list:
+            with open(self.cocktail_list) as list:
                 cocktail_list = json.load(list)
         except FileNotFoundError:
             print('[CocktailDownloader] No list. Run get_list() before running get_cocktails(). Exiting...')
             exit(0)
         cocktail_list_size = len(cocktail_list) # total amount of cocktails we have to check
 
-        cocktail_checklist = {}
+        cocktail_checklist = {} # keeps track of cocktail data already downloaded (by id)
         if not force_overwrite: # if we only want to fill in cocktails we don't already have
             try:
-                with open('cocktail_checklist.txt') as checklist:
+                with open(self.cocktail_checklist) as checklist:
                     cocktail_checklist = json.load(checklist)
             except FileNotFoundError:
                 print('[CocktailDownloader] No checklist. Will create.')
@@ -63,16 +72,16 @@ class CocktailDownloader():
         cocktail_data = [] # stores the final data
         if not force_overwrite: # ignores previous deta if we're overwriting
             try:
-                with open('cocktails.txt') as data_file:
+                with open(self.cocktail_data) as data_file:
                     cocktail_data = json.load(data_file)
             except FileNotFoundError:
                 print('[CocktailDownloader] No already existing data. Will create.')
 
         def save_progress():
-            with open('cocktail_checklist.txt', 'w') as checklist:
+            with open(self.cocktail_checklist, 'w') as checklist:
                 json.dump(cocktail_checklist, checklist)
             
-            with open('cocktails.txt', 'w') as data_file:
+            with open(self.cocktail_data, 'w') as data_file:
                 json.dump(cocktail_data, data_file)
             
             print('Done!')
@@ -111,10 +120,6 @@ class CocktailDownloader():
                         exit(0)
                     except:
                         retry_count += 1
-                    # except response.HTTPError as error:
-                    #     print(error)
-                    #     print('Perhaps bad key?')
-                    #     sys.exit(1)
 
                     if retry_count >= self.retries: # if we reach max retries
                         print(f'[CocktailDownloader] Max reties met for id: {id}. Skipping.')
@@ -132,7 +137,7 @@ class CocktailDownloader():
             download_count += 1
             stdout.write(f'[CocktailDownloader] Downloaded {download_count} out of {cocktail_list_size}\r')
             stdout.flush()
-        
+
         save_progress()
 
 def main():
