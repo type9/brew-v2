@@ -20,7 +20,7 @@ class CocktailDownloader():
         alc_resp = requests.get(alc_req).json()
         nonalc_resp = requests.get(nonalc_req).json()
 
-        list = ['drinks']
+        list = []
 
         count = 0
         for drink in alc_resp['drinks']:
@@ -30,7 +30,7 @@ class CocktailDownloader():
         for drink in nonalc_resp['drinks']:
             list.append(drink)
             count += 1
-        
+
         with open('cocktail_list.txt', 'w') as outfile:
             json.dump(list, outfile)
         
@@ -74,12 +74,14 @@ class CocktailDownloader():
             
             with open('cocktails.txt', 'w') as data_file:
                 json.dump(cocktail_data, data_file)
+            
+            print('Done!')
         
         # This block handles the keyboard interrupt
         def keyboardInterruptHandler(signal, frame):
             print("[CocktailDownloader] Interrupt detected. Saving progress...",)
             save_progress()
-            os._exit(0)
+            os._exit(0) # ends threaded download process
 
         signal.signal(signal.SIGINT, keyboardInterruptHandler) # registers handler
 
@@ -130,8 +132,8 @@ class CocktailDownloader():
             download_count += 1
             stdout.write(f'[CocktailDownloader] Downloaded {download_count} out of {cocktail_list_size}\r')
             stdout.flush()
-
-        print('Done!')
+        
+        save_progress()
 
 def main():
     import sys
