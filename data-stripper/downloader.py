@@ -128,7 +128,7 @@ class CocktailDownloader():
                     time.sleep(self.msbuffer/1000) # if we need to retry we buffer
 
                 if data: # if we successfully got the data
-                    cocktail_data.append(data) # append it to our final data list
+                    cocktail_data.append(data['drinks'][0]) # append it to our final data list
                     cocktail_checklist[id] = True # update our checklist
 
                 time.sleep(self.msbuffer/1000) # after each request we buffer
@@ -141,12 +141,9 @@ class CocktailDownloader():
         save_progress()
 
 def main():
-    import sys
-    arguments = sys.argv[1:]  # Exclude script name in first argument
-
     downloader = CocktailDownloader()
     downloader.get_cocktail_list()
-    downloader.get_cocktails()
+    downloader.get_cocktails(force_overwrite=True)
 
 if __name__ == '__main__':
     main()
