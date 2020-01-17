@@ -47,10 +47,11 @@ def main():
     
     options = {
         'with_labels':  True,
-        'label_color': 'blue',
+        'font_color': 'blue',
         'node_size': 50,
         'width': 0,
     }
+
     graph.remove_node('Water')
     graph.remove_node('Sugar')
     graph.remove_node('Ice')

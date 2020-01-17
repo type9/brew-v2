@@ -25,6 +25,7 @@ class DataCleaner():
             pickle.dump(cleaned_data, destination_file)
 
     def get_ingredients(self, drink_data):
+        '''TODO: Normalize string captilization'''
         ingr_str = 'strIngredient'
         max_ingr = 15
 

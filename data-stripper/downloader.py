@@ -12,7 +12,7 @@ class CocktailDownloader():
         self.key = os.getenv("COCKTAILDB_API_KEY")
 
         # request configuration
-        self.msbuffer = request_msbuffer
+        self.sbuffer = request_msbuffer * 1000
         self.retries = retries
 
         # directory configuration
@@ -85,7 +85,7 @@ class CocktailDownloader():
                 json.dump(cocktail_data, data_file)
             
             print('Done!')
-        
+
         # This block handles the keyboard interrupt
         def keyboardInterruptHandler(signal, frame):
             print("[CocktailDownloader] Interrupt detected. Saving progress...",)
@@ -94,56 +94,62 @@ class CocktailDownloader():
 
         signal.signal(signal.SIGINT, keyboardInterruptHandler) # registers handler
 
-        print(f'\n[CocktailDownloader] Loaded {cocktail_list_size} drinks to download. <CTRL + C> to save progress and exit.')
-        #   This block makes a call of each drink in the cocktail_list and appends it to cocktail_data if successful.
+        # This block handles the logging of the download process
         download_count = 0
-        for cocktail in cocktail_list:
-            id = cocktail['idDrink']
-            if not id in cocktail_checklist: # if we don't have the id in our checklist
-                data = None
-
-                retry = True
-                retry_count = 0
-                while retry: # runs for a maximum number of retries on timeout
-                    try:
-                        response = requests.get(cocktail_by_id + id) # we request the data by id
-                        response.raise_for_status()
-                        data = response.json()
-                        retry = False
-                    except requests.exceptions.Timeout:
-                        retry_count += 1
-                    except requests.exceptions.TooManyRedirects:
-                        print('Redirect error. Perhaps bad key?')
-                        retry = False
-                    except requests.exceptions.RequestException as error:
-                        print(error)
-                        exit(0)
-                    except:
-                        retry_count += 1
-
-                    if retry_count >= self.retries: # if we reach max retries
-                        print(f'[CocktailDownloader] Max reties met for id: {id}. Skipping.')
-                        break
-                    
-                    time.sleep(self.msbuffer/1000) # if we need to retry we buffer
-
-                if data: # if we successfully got the data
-                    cocktail_data.append(data['drinks'][0]) # append it to our final data list
-                    cocktail_checklist[id] = True # update our checklist
-
-                time.sleep(self.msbuffer/1000) # after each request we buffer
-
-            # Logs the progress of the downloader
+        def log_download():
+            nonlocal download_count
             download_count += 1
             stdout.write(f'[CocktailDownloader] Downloaded {download_count} out of {cocktail_list_size}\r')
             stdout.flush()
+
+        print(f'\n[CocktailDownloader] Loaded {cocktail_list_size} drinks to download. <CTRL + C> to save progress and exit.')
+
+        #   This block makes a call of each drink in the cocktail_list and appends it to cocktail_data if successful.
+        for cocktail in cocktail_list:
+            id = cocktail['idDrink']
+            if id in cocktail_checklist:
+                log_download()
+                continue
+
+            data = None # request data
+            retry = True
+            retry_count = 0
+            while retry: # runs for a maximum number of retries on timeout
+                try:
+                    response = requests.get(cocktail_by_id + id) # we request the data by id
+                    response.raise_for_status()
+                    data = response.json()
+                    retry = False
+                except requests.exceptions.Timeout:
+                    retry_count += 1
+                except requests.exceptions.TooManyRedirects:
+                    print('Redirect error. Perhaps bad key?')
+                    retry = False
+                except requests.exceptions.RequestException as error:
+                    print(error)
+                    exit(0)
+                except:
+                    retry_count += 1
+
+                if retry_count >= self.retries: # if we reach max retries
+                    print(f'[CocktailDownloader] Max reties met for id: {id}. Skipping.')
+                    break
+                
+                time.sleep(self.sbuffer) # if we need to retry we buffer
+
+            if data: # if we successfully got the data
+                cocktail_data.append(data['drinks'][0]) # append it to our final data list
+                cocktail_checklist[id] = True # update our checklist
+
+            log_download()
+            time.sleep(self.sbuffer) # after each request we buffer
 
         save_progress()
 
 def main():
     downloader = CocktailDownloader()
     downloader.get_cocktail_list()
-    downloader.get_cocktails(force_overwrite=True)
+    downloader.get_cocktails()
 
 if __name__ == '__main__':
     main()
