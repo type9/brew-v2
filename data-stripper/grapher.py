@@ -46,7 +46,7 @@ def main():
     print(f'{nx.info(graph)}')
     
     options = {
-        'with_labels':  True,
+        'with_labels':  False,
         'font_color': 'blue',
         'node_size': 50,
         'width': 0,
