@@ -1,0 +1,1 @@
+export FLASK_APP=flaskserver/app.py; export FLASK_ENV=development; flask run
