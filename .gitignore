@@ -1,11 +1,14 @@
 .env
 .__pycache__
+.vscode
+venv
 graph.png
 # data-stripper
 flaskserver/data/*
 flaskserver/data-stripper/__pycache__
 flaskserver/data-stripper/.pytest_cache
 #flask-server
+flaskserver/__pycache__
 #react-app
 react-app/node_modules/*
 react-app/yarn.lock

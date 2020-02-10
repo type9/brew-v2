@@ -18,6 +18,7 @@ class IngredientGraph(nx.Graph):
         self.inverse_edges()
 
     def build(self):
+        count = 0
         for drink in self.drinks: # for each drink
             if not drink.is_alcoholic:
                 continue
@@ -34,6 +35,9 @@ class IngredientGraph(nx.Graph):
                         pass
 
                     self.add_edge(ingredient, other_ingredient, weight=old_weight+1) # add edge between the two (different) ingredients
+                    count += 1
+        
+        print(f"[Grapher] Built graph with {count} associations")
 
     def inverse_edges(self):
         for edge in self.edges():

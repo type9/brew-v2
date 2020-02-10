@@ -1,7 +1,9 @@
 import os, sys
+import json
 from flask import Flask, render_template
-
 from pathlib import Path
+
+import networkx as nx
 # Data modules
 from data_stripper.downloader import CocktailDownloader
 from data_stripper.cleaner import DataCleaner
@@ -12,7 +14,6 @@ app = Flask(__name__)
 # Directories
 DATASTRIP_DIR = Path("flaskserver/data_stripper")
 DATA_DIR = Path("flaskserver/data")
-_PATH = DATA_DIR/DATASTRIP_DIR
 DATA_FILE = "cocktail_data.txt"
 CLEANDATA_FILE = "cleaned_data.bin"
 
@@ -23,16 +24,19 @@ def get_data():
     downloader.get_cocktails()
     DataCleaner(DATA_DIR/DATA_FILE, DATA_DIR/CLEANDATA_FILE)
 
-get_data()
+get_data() # intialize and dowload data
+graph = IngredientGraph(DATA_DIR/CLEANDATA_FILE) # create the graph
 #Initialization of server
 
 @app.route("/")
 def index():
     return render_template("index.html", token="flaskreact")
 
+
+# API
 @app.route("/api/graph")
 def get_graph():
-    return
+    return json.dumps(nx.to_dict_of_dicts(graph))
 
 if __name__ == '__main__':
     app.run(debug=True)
