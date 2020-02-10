@@ -36,7 +36,7 @@ def index():
 # API
 @app.route("/api/graph")
 def get_graph():
-    return json.dumps(nx.to_dict_of_dicts(graph))
+    return json.dumps(nx.node_link_data(graph))
 
 if __name__ == '__main__':
     app.run(debug=True)
