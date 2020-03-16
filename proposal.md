@@ -22,6 +22,7 @@ The goal of the project is to provide an interactive exploration website that le
 NOTE: I use graph and network interchangably here. Keep in mind when I say graph I'm referring to the mathematical structure of a graph, or in lamen, a network.
 
 Currently the app has two parts:
+
 Flask backend
 - Data scrapper to scrape the preexisting cocktail database of cocktails (does this automatically already on start-up).
 - Data compiler to compile a graph based off cocktail ingredients and which cocktails they exist in (does this automatically on start-up).
@@ -74,7 +75,7 @@ Getting to the bike is my goal here. The Car features can always be tacked on la
 
 ## Wireframes
 
-![simulation concept](https://photos.app.goo.gl/9h83W1wLR46fUdsd7)
+![simulation concept](https://imgur.com/a/Gu8Zofr)
 
 ## Evaluation
 
