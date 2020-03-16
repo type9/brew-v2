@@ -15,10 +15,30 @@ class App extends Component{
           simulation: null
         }
       ],
-      graphData: [],
+      graphLoaded: false,
+      graphData: null,
     }
   }
 
+  componentDidMount(){
+    fetch("/api/graph")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            graphLoaded: true,
+            graphData: result,
+          });
+        },
+        (error) => {
+          this.setState({
+            graphLoaded: false,
+            error
+          });
+        }
+      )
+  }
+  
   render() {
     //STYLE
     const App = styled.div`

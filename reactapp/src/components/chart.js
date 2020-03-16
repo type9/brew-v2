@@ -1,21 +1,43 @@
-import React, {Component} from "React"
+import React, {Component} from "React";
 
-import styled from "styled-components"
-import * as d3 from "d3"
+import styled from "styled-components";
+import * as d3 from "d3";
 
 class GraphChart extends Component{
     constructor(props){
-        super(props)
-        this.createGraphChart = this.createGraphChart.bind(this)
+        super(props);
+        this.createGraphChart = this.createGraphChart.bind(this);
+        this.data = null;
+        this.height = 600;
+        this.width = 600;
+        this.simulation = null;
     }
     componentDidMount(){
-        this.createGRaphChart()
+        fetch("/api/graph")
+            .then(res => res.json())
+            .then(
+            (result) => {
+                this.setState({
+                    graphLoaded: true,
+                    graphData: result,
+                });
+                this.data = this.props.graphData;
+            },
+            (error) => {
+                this.setState({
+                    graphLoaded: false,
+                    error
+                });
+            }
+        )
     }
     componentDidUpdate(){
-        this.createGraphChart()
+        if(this.props.graphData !== prevProps.graphData){
+            createGRaphChart(this.props.graphData, this.height, this.width)
+        }
     }
 
-    createGraphChart(data){
+    createGraphChart(data, height, width){
         const links = data.links.map(d => Object.create(d));
         const nodes = data.nodes.map(d => Object.create(d));
       
@@ -26,7 +48,7 @@ class GraphChart extends Component{
             .force("y", d3.forceY());
       
         const svg = d3.create("svg")
-            .attr("viewBox", [-width / 2, -height / 2, width, height]);
+            .attr("viewBox", [-width / 2, -height / 2, width, height]); //UNDEF
       
         const link = svg.append("g")
             .attr("stroke", "#999")
@@ -44,7 +66,7 @@ class GraphChart extends Component{
           .join("circle")
             .attr("r", 5)
             // .attr("fill", color)
-            .call(drag(simulation));
+            // .call(drag(simulation));
       
         node.append("title")
             .text(d => d.id);
@@ -61,45 +83,49 @@ class GraphChart extends Component{
               .attr("cy", d => d.y);
         });
       
-        invalidation.then(() => simulation.stop());
+        // invalidation.then(() => simulation.stop());
       
         return svg.node();
     }
 
-    drag = simulation => {
+    // drag = simulation => {
   
-        function dragstarted(d) {
-          if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-          d.fx = d.x;
-          d.fy = d.y;
-        }
+    //     function dragstarted(d) {
+    //       if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    //       d.fx = d.x;
+    //       d.fy = d.y;
+    //     }
         
-        function dragged(d) {
-          d.fx = d3.event.x;
-          d.fy = d3.event.y;
-        }
+    //     function dragged(d) {
+    //       d.fx = d3.event.x;
+    //       d.fy = d3.event.y;
+    //     }
         
-        function dragended(d) {
-          if (!d3.event.active) simulation.alphaTarget(0);
-          d.fx = null;
-          d.fy = null;
-        }
+    //     function dragended(d) {
+    //       if (!d3.event.active) simulation.alphaTarget(0);
+    //       d.fx = null;
+    //       d.fy = null;
+    //     }r
         
-        return d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended);
-    }
+    //     return d3.drag()
+    //         .on("start", dragstarted)
+    //         .on("drag", dragged)
+    //         .on("end", dragended);
+    // }
     render(){
         //STYLE
-        const Chart = styled.aside`
+        const Chart = styled.div`
         `;
-        
-        data = this.props.graphData;
-        simulation = this.createBarChart(data)
+        //SIM setup
+        if(this.props.graphLoaded == true){
+            console.log('Graph data loaded')
+            this.simulation = this.createGraphChart(this.data, 600 , 600)
+        } else {
+            console.log('Graph data not loaded')
+        }
         return(
             <Chart>
-                {simulation}
+                {this.simulation}
             </Chart>
         );
     }
