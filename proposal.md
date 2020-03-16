@@ -75,7 +75,7 @@ Getting to the bike is my goal here. The Car features can always be tacked on la
 
 ## Wireframes
 
-![simulation concept](https://imgur.com/a/Gu8Zofr)
+![simulation concept](https://i.imgur.com/oDJqqXm.jpg)
 
 ## Evaluation
 
