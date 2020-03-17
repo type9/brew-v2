@@ -47,7 +47,7 @@ class App extends Component{
     `;
     
     //FUNCTIONS
-    const token = window.token
+    const token = window.token;
 
     return(
       <App>
