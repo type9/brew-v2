@@ -6,7 +6,7 @@ class Nav extends Component{
     render() {
         //STYLE
         const Nav = styled.nav`
-            position:fixed;
+            position: relative;
             z-index:1;
             width:100%;
             background-color: ${props => props.theme.fg};
@@ -33,7 +33,7 @@ class Nav extends Component{
         `;
         const NavLink = styled.a`
             display: inline-block;
-            line-height: calc(${props => props.theme.spc_4} - 4px);
+            line-height: calc(60px - 4px);
             flex: 0 0 auto;
             margin-right: ${props => props.theme.spc_2};
             color: ${props => props.theme.primary};

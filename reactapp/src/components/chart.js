@@ -5,14 +5,23 @@ import D3Graph from "./d3graph";
 let visual = null;
 
 function GraphChart(){
-    const [width, setWidth] = useState(600);
-    const [height, setHeight] = useState(600);
+    const refElement = useRef(null);
+    const [width, setWidth] = useState(document.body.clientWidth * 0.8);
+    const [height, setHeight] = useState(document.body.clientHeight - 60);
     const [graphData, setData] = useState(null);
     const [active, setActive] = useState(null);
-    const refElement = useRef(null);
 
     useEffect(fetchData, []);
+    useEffect(handleResizeEvent, []);
     useEffect(initGraph, [ graphData ]);
+    useEffect(updateVisualOnResize, [ width, height ]);
+
+    function getWidth(){
+        return document.body.clientWidth * 0.8;
+    }
+    function getHeight(){
+        return document.body.clientHeight - 60;
+    }
 
     function fetchData(){
         fetch("/api/graph")
@@ -40,10 +49,31 @@ function GraphChart(){
         }
     }
 
+    function handleResizeEvent() {
+        let resizeTimer;
+        const handleResize = () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                setWidth(getWidth());
+                setHeight(getHeight());
+
+            }, 300);
+        }
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }
+
+    function updateVisualOnResize() {
+        visual && visual.resize(width, height);
+    }
+
     return (
         <div className="chart-container">
             <div>{active}</div>
-            <div className = "graph-container" ref={refElement}/>
+            <div id = "graph-container" ref={refElement}/>
         </div>
     );
 }

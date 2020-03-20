@@ -45,6 +45,12 @@ class App extends Component{
       background-color: ${props => props.theme.bg};
       color: ${props => props.theme.seconadry};
     `;
+
+    const Content = styled.div`
+      display: grid;
+      grid-template-columns: 1fr 4fr;
+      width: 100%;
+    `;
     
     //FUNCTIONS
     const token = window.token;
@@ -52,8 +58,10 @@ class App extends Component{
     return(
       <App>
         <Nav />
-        <Sidebar />
-        <GraphChart />
+        <Content>
+          <Sidebar />
+          <GraphChart />
+        </Content>
       </App>
     );
   }
