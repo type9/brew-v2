@@ -6,8 +6,8 @@ let visual = null;
 
 function GraphChart(){
     const refElement = useRef(null);
-    const [width, setWidth] = useState(document.body.clientWidth * 0.8);
-    const [height, setHeight] = useState(document.body.clientHeight - 60);
+    const [width, setWidth] = useState(window.innerWidth * 0.8);
+    const [height, setHeight] = useState(window.innerHeight - 60);
     const [graphData, setData] = useState(null);
     const [active, setActive] = useState(null);
 
@@ -17,10 +17,10 @@ function GraphChart(){
     useEffect(updateVisualOnResize, [ width, height ]);
 
     function getWidth(){
-        return document.body.clientWidth * 0.8;
+        return window.innerWidth * 0.8;
     }
     function getHeight(){
-        return document.body.clientHeight - 60;
+        return window.innerHeight - 60;
     }
 
     function fetchData(){

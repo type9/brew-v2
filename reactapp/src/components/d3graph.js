@@ -99,6 +99,7 @@ class D3Graph {
     }
 
     resize = (width, height) => {
+        console.log(document.body.clientWidth, document.body.clientHeight);
         console.log(`RESIZE AT ${width} ${height}`)
         d3.select(this.container).select("svg").remove();
         d3.select(this.container)
