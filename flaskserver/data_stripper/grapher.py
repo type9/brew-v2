@@ -6,7 +6,7 @@ from pathlib import Path
 class IngredientGraph(nx.Graph):
     '''Builds graph from drink objects. Accepts array of drink
     objects stored as binary'''
-    def __init__(self, data_path=None, scale=10, inverse_weight=True):
+    def __init__(self, data_path=None, scale=10, inverse_weight=False):
         super(IngredientGraph, self).__init__()
         self.drinks = None
         self.scale = scale
@@ -17,6 +17,7 @@ class IngredientGraph(nx.Graph):
         
         if self.drinks:
             self.build()
+        if inverse_weight:
             self.inverse_edges()
 
     def build(self):

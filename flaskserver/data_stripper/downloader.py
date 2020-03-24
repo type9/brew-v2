@@ -27,6 +27,8 @@ class CocktailDownloader():
         alc_req = f'https://www.thecocktaildb.com/api/json/v2/{self.key}/filter.php?a=Alcoholic'
         nonalc_req = f'https://www.thecocktaildb.com/api/json/v2/{self.key}/filter.php?a=Non_Alcoholic'
 
+        print(f"\n\nREQUEST DATA\nKEY {self.key}")
+        print(requests.get(alc_req))
         alc_resp = requests.get(alc_req).json()
         nonalc_resp = requests.get(nonalc_req).json()
 
