@@ -1,6 +1,6 @@
 import os, sys
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from pathlib import Path
 
 import networkx as nx
@@ -37,6 +37,14 @@ def index():
 @app.route("/api/graph")
 def get_graph():
     return json.dumps(nx.node_link_data(graph))
+
+@app.route("/api/subgraph", methods=['POST'])
+def get_subgraph():
+    nodes = request.get_json(force=True)['nodes']
+    print(nodes)
+    subgraph = graph.subgraph(nodes)
+    print(json.dumps(nx.node_link_data(subgraph)))
+    return json.dumps(nx.node_link_data(subgraph))
 
 if __name__ == '__main__':
     app.run(debug=True)

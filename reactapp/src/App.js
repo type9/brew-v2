@@ -9,36 +9,38 @@ import styled from "styled-components";
 class App extends Component{
   constructor(props) {
     super(props);
+    this.setGraphData = this.setGraphData.bind(this);
+    this.addPart = this.addPart.bind(this);
     this.state = {
-      history : [
-        {
-          simulation: null
-        }
-      ],
-      graphLoaded: false,
       graphData: null,
+      partBucket: [],
     }
   }
 
   componentDidMount(){
     fetch("/api/graph")
-      .then(res => res.json())
-      .then(
+    .then(res => res.json())
+    .then(
         (result) => {
-          this.setState({
-            graphLoaded: true,
-            graphData: result,
-          });
+            this.setState({graphData: result})
         },
         (error) => {
-          this.setState({
-            graphLoaded: false,
-            error
-          });
+            console.log(error);
         }
-      )
+    );
   }
-  
+
+  setGraphData(data) {
+    this.setState({graphData: data});
+  }
+
+  addPart(data) {
+    console.log("Added " + data);
+    this.setState({
+      partBucket: [...this.state.partBucket, data]
+    });
+  }
+
   render() {
     //STYLE
     const App = styled.div`
@@ -59,8 +61,14 @@ class App extends Component{
       <App>
         <Nav />
         <Content>
-          <Sidebar />
-          <GraphChart />
+          <Sidebar 
+            addPart={this.addPart}
+            partBucket={this.state.partBucket}
+            setGraphData={this.setGraphData}
+          />
+          <GraphChart 
+            graphData={this.state.graphData}
+          />
         </Content>
       </App>
     );

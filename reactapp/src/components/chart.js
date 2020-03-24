@@ -3,23 +3,22 @@ import D3Graph from "./d3graph";
 
 let visual = null;
 
-function GraphChart(){
+function GraphChart(props){
+    console.log(props);
     const refElement = useRef(null);
-    const [width, setWidth] = useState(window.innerWidth);
-    const [height, setHeight] = useState(window.innerHeight);
-    const [graphData, setData] = useState(null);
-    const [active, setActive] = useState(null);
+    const [width, setWidth] = useState(window.innerWidth - 312);
+    const [height, setHeight] = useState(window.innerHeight - 60);
 
-    useEffect(fetchData, []);
+    // useEffect(fetchData, []);
     useEffect(handleResizeEvent, []);
-    useEffect(initGraph, [ graphData ]);
+    useEffect(initGraph, []);
     useEffect(updateVisualOnResize, [ width, height ]);
 
     function getWidth(){
-        return window.innerWidth;
+        return window.innerWidth - 312;
     }
     function getHeight(){
-        return window.innerHeight;
+        return window.innerHeight - 60;
     }
 
     function fetchData(){
@@ -27,7 +26,7 @@ function GraphChart(){
         .then(res => res.json())
         .then(
             (result) => {
-                setData(result);
+                props.setGraphData(result);
             },
             (error) => {
                 console.log(error);
@@ -36,6 +35,7 @@ function GraphChart(){
     }
 
     function initGraph(){
+        let graphData = props.graphData;
         if(graphData){
             console.log("initializing graph with data: ");
             console.log(graphData);
@@ -71,7 +71,6 @@ function GraphChart(){
 
     return (
         <div className="chart-container">
-            <div>{active}</div>
             <div id = "graph-container" ref={refElement}/>
         </div>
     );

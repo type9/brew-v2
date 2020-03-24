@@ -6,16 +6,18 @@ from pathlib import Path
 class IngredientGraph(nx.Graph):
     '''Builds graph from drink objects. Accepts array of drink
     objects stored as binary'''
-    def __init__(self, data_path, scale=10, inverse_weight=True):
+    def __init__(self, data_path=None, scale=10, inverse_weight=True):
         super(IngredientGraph, self).__init__()
         self.drinks = None
         self.scale = scale
 
-        with open(Path(data_path), 'rb') as data_file:
-            self.drinks = pickle.load(data_file)
+        if data_path:
+            with open(Path(data_path), 'rb') as data_file:
+                self.drinks = pickle.load(data_file)
         
-        self.build()
-        self.inverse_edges()
+        if self.drinks:
+            self.build()
+            self.inverse_edges()
 
     def build(self):
         count = 0

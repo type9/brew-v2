@@ -3,9 +3,13 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import PartSearch from "./partsearch";
+import BucketList from "./bucket";
 import styled from "styled-components";
 
 class Sidebar extends Component{
+    constructor(props) {
+        super(props);
+    }
     render(){
         //STYLE
         const Sidebar = styled.div`
@@ -18,14 +22,27 @@ class Sidebar extends Component{
         const SearchContainer = styled.div`
             height: 60px;
             width: 100%;
-            padding: 6px;
+            padding: 12px 6px 6px 6px;
+        `;
+
+        const BucketContainer = styled.div`
+            padding: 18px 6px 6px 6px;
+            width: 100%;
         `;
 
         return(
             <Sidebar>
                 <SearchContainer>
-                    <PartSearch />
+                    <PartSearch
+                        addPart={this.props.addPart}
+                    />
                 </SearchContainer>
+                <BucketContainer>
+                    <BucketList
+                        partBucket={this.props.partBucket}
+                        setGraphData={this.props.setGraphData}
+                   />
+                </BucketContainer>
             </Sidebar>
         )
     }
