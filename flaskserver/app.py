@@ -12,8 +12,8 @@ from data_stripper.grapher import IngredientGraph
 app = Flask(__name__)
 
 # Directories
-DATASTRIP_DIR = Path("data_stripper")
-DATA_DIR = Path("data")
+DATASTRIP_DIR = Path("flaskserver/data_stripper")
+DATA_DIR = Path("flaskserver/data")
 DATA_FILE = "cocktail_data.txt"
 CLEANDATA_FILE = "cleaned_data.bin"
 

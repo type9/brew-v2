@@ -10,6 +10,7 @@ class Sidebar extends Component{
     constructor(props) {
         super(props);
     }
+
     render(){
         //STYLE
         const Sidebar = styled.div`
@@ -41,7 +42,7 @@ class Sidebar extends Component{
                     <BucketList
                         partBucket={this.props.partBucket}
                         setGraphData={this.props.setGraphData}
-                   />
+                    />
                 </BucketContainer>
             </Sidebar>
         )

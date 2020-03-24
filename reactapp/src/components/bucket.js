@@ -34,7 +34,7 @@ function BucketList(props){
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(false);
 
-    //When the part bucket updates, we retrieve an updated subgraph from the server
+    // When the part bucket updates, we retrieve an updated subgraph from the server
     useEffect(() => {
         if(props.partBucket.length === 0){
             return undefined;
@@ -56,9 +56,9 @@ function BucketList(props){
             method: "POST",
             body: JSON.stringify(data)
         })
-        .then((response) => {
-            console.log("NEWGRAPHDATA: " + response.json());
-            props.setGraphData(response.json());
+        .then((response) => { return response.json(); })
+        .then((data) => {
+            props.setGraphData(data);
         })
     }, [props.partBucket]);
 
