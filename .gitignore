@@ -4,7 +4,6 @@
 venv
 graph.png
 # data-stripper
-flaskserver/data/*
 flaskserver/data-stripper/__pycache__
 flaskserver/data-stripper/.pytest_cache
 #flask-server

@@ -35,32 +35,32 @@ function BucketList(props){
     const [secondary, setSecondary] = React.useState(false);
 
     // When the part bucket updates, we retrieve an updated subgraph from the server
-    useEffect(() => {
-        if(props.partBucket.length === 0){
-            return undefined;
-        }
-        console.log("Fetching subgraph");
-        let nodes = [];
-        props.partBucket.map(data => {
-            console.log(data);
-            let ingrNum = 1;
-            while(data['strIngredient' + ingrNum]) {
-                nodes.push(data['strIngredient' + ingrNum]);
-                ingrNum += 1;
-            }
-        });
+    // useEffect(() => {
+    //     if(props.partBucket.length === 0){
+    //         return undefined;
+    //     }
+    //     console.log("Fetching subgraph");
+    //     let nodes = [];
+    //     props.partBucket.map(data => {
+    //         console.log(data);
+    //         let ingrNum = 1;
+    //         while(data['strIngredient' + ingrNum]) {
+    //             nodes.push(data['strIngredient' + ingrNum]);
+    //             ingrNum += 1;
+    //         }
+    //     });
 
-        let data = {nodes: nodes};
-        console.log(data);
-        fetch('/api/subgraph', {
-            method: "POST",
-            body: JSON.stringify(data)
-        })
-        .then((response) => { return response.json(); })
-        .then((data) => {
-            props.setGraphData(data);
-        })
-    }, [props.partBucket]);
+    //     let data = {nodes: nodes};
+    //     console.log(data);
+    //     fetch('/api/subgraph', {
+    //         method: "POST",
+    //         body: JSON.stringify(data)
+    //     })
+    //     .then((response) => { return response.json(); })
+    //     .then((data) => {
+    //         props.setGraphData(data);
+    //     })
+    // }, [props.partBucket]);
 
     function populate(element) {
         console.log("Populating");

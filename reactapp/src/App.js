@@ -26,8 +26,34 @@ class App extends Component{
         },
         (error) => {
             console.log(error);
-        }
-    );
+        });
+  }
+
+  updateGraph(){
+    if(this.state.partBucket.length === 0){
+      return undefined;
+    }
+    console.log("Fetching subgraph");
+    let nodes = [];
+    this.state.partBucket.map(data => {
+      console.log(data);
+      let ingrNum = 1;
+      while(data['strIngredient' + ingrNum]) {
+          nodes.push(data['strIngredient' + ingrNum]);
+          ingrNum += 1;
+      }
+    });
+
+    let data = {nodes: nodes};
+    console.log(data);
+    fetch('/api/subgraph', {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then((response) => { return response.json(); })
+    .then((data) => {
+      this.setGraphData(data);
+    })
   }
 
   setGraphData(data) {
@@ -38,7 +64,7 @@ class App extends Component{
     console.log("Added " + data);
     this.setState({
       partBucket: [...this.state.partBucket, data]
-    });
+    }, this.updateGraph());
   }
 
   render() {
