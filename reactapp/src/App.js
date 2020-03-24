@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 
-import Nav from "./components/nav"
-import Sidebar from  "./components/sidebar"
-import GraphChart from "./components/chart"
+import Nav from "./components/nav";
+import Sidebar from  "./components/sidebar";
+import GraphChart from "./components/chart";
 
-import styled from "styled-components"
+import styled from "styled-components";
 
 class App extends Component{
   constructor(props) {

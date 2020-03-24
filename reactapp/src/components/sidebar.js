@@ -1,6 +1,9 @@
 import React, {Component} from "React"
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import styled from "styled-components"
+import PartSearch from "./partsearch";
+import styled from "styled-components";
 
 class Sidebar extends Component{
     render(){
@@ -12,8 +15,17 @@ class Sidebar extends Component{
             ${'' /* margin-top: ${props => props.theme.spc_4}; */}
         `;
 
+        const SearchContainer = styled.div`
+            height: 60px;
+            width: 100%;
+            padding: 6px;
+        `;
+
         return(
             <Sidebar>
+                <SearchContainer>
+                    <PartSearch />
+                </SearchContainer>
             </Sidebar>
         )
     }

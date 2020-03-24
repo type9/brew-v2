@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import D3Graph from "./d3graph";
 
@@ -6,8 +5,8 @@ let visual = null;
 
 function GraphChart(){
     const refElement = useRef(null);
-    const [width, setWidth] = useState(window.innerWidth * 0.8);
-    const [height, setHeight] = useState(window.innerHeight - 60);
+    const [width, setWidth] = useState(window.innerWidth);
+    const [height, setHeight] = useState(window.innerHeight);
     const [graphData, setData] = useState(null);
     const [active, setActive] = useState(null);
 
@@ -17,10 +16,10 @@ function GraphChart(){
     useEffect(updateVisualOnResize, [ width, height ]);
 
     function getWidth(){
-        return window.innerWidth * 0.8;
+        return window.innerWidth;
     }
     function getHeight(){
-        return window.innerHeight - 60;
+        return window.innerHeight;
     }
 
     function fetchData(){

@@ -11,7 +11,6 @@ import {ThemeProvider, createGlobalStyle} from "styled-components";
 const GlobalStyle = createGlobalStyle`
      body{
          background-color:${theme.bg};
-
          margin: 0;
          padding: 0;
      }
