@@ -46,5 +46,9 @@ def get_subgraph():
     print(json.dumps(nx.node_link_data(subgraph)))
     return json.dumps(nx.node_link_data(subgraph))
 
+@app.route("/healthcheck", methods=['POST'])
+def get_healthcheck():
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+
 if __name__ == '__main__':
     app.run(debug=True)
