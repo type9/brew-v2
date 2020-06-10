@@ -31,8 +31,9 @@ const useStyles = makeStyles(theme => ({
 
 function BucketList(props){
     const classes = useStyles();
-    const [dense, setDense] = React.useState(false);
-    const [secondary, setSecondary] = React.useState(false);
+    const [dense, setDense] = useState(false);
+    const [primary, setPrimary] = useState(false);
+    const [secondary, setSecondary] = useState(false);
 
     // When the part bucket updates, we retrieve an updated subgraph from the server
     // useEffect(() => {
@@ -63,17 +64,15 @@ function BucketList(props){
     // }, [props.partBucket]);
 
     function populate(element) {
-        console.log("Populating");
-        console.log(props.partBucket);
         return props.partBucket.map(data =>
             React.cloneElement(element, {
-                primary: data.strDrink,
+                name: data['strDrink'],
             }),
         );
     }
 
     return(
-        <Grid item xs={12} md={6} >
+        <Grid item xs={12} md={8} >
             <Typography variant="h6">
             Currently simulating:
             </Typography>
@@ -87,7 +86,7 @@ function BucketList(props){
                     </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                    primary="Primary"
+                    primary={props.name ? 'Secondary text' : null}
                     secondary={secondary ? 'Secondary text' : null}
                     />
                     <ListItemSecondaryAction>

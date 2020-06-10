@@ -30,7 +30,9 @@ class App extends Component{
   }
 
   updateGraph(){
+    console.log(this.state.partBucket);
     if(this.state.partBucket.length === 0){
+      console.log("No data to update");
       return undefined;
     }
     console.log("Fetching subgraph");
@@ -61,17 +63,20 @@ class App extends Component{
   }
 
   addPart(data) {
-    console.log("Added " + data);
+    // this.setState(prevState => ({
+    //   partBucket: [...prevState.partBucket, data]
+    // }), this.updateGraph());
+    let newBucket = this.state.partBucket.concat([data])
     this.setState({
-      partBucket: [...this.state.partBucket, data]
-    }, this.updateGraph());
+      partBucket: newBucket
+    }, this.updateGraph);
   }
 
   render() {
     //STYLE
     const App = styled.div`
       background-color: ${props => props.theme.bg};
-      color: ${props => props.theme.seconadry};
+      color: ${props => props.theme.secondary};
     `;
 
     const Content = styled.div`
