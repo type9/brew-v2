@@ -18,7 +18,7 @@ import PartSearch from './partsearch';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 3,
         maxWidth: 752,
     },
     demo: {
@@ -32,70 +32,37 @@ const useStyles = makeStyles(theme => ({
 function BucketList(props){
     const classes = useStyles();
     const [dense, setDense] = useState(false);
-    const [primary, setPrimary] = useState(false);
-    const [secondary, setSecondary] = useState(false);
 
-    // When the part bucket updates, we retrieve an updated subgraph from the server
-    // useEffect(() => {
-    //     if(props.partBucket.length === 0){
-    //         return undefined;
-    //     }
-    //     console.log("Fetching subgraph");
-    //     let nodes = [];
-    //     props.partBucket.map(data => {
-    //         console.log(data);
-    //         let ingrNum = 1;
-    //         while(data['strIngredient' + ingrNum]) {
-    //             nodes.push(data['strIngredient' + ingrNum]);
-    //             ingrNum += 1;
-    //         }
-    //     });
-
-    //     let data = {nodes: nodes};
-    //     console.log(data);
-    //     fetch('/api/subgraph', {
-    //         method: "POST",
-    //         body: JSON.stringify(data)
-    //     })
-    //     .then((response) => { return response.json(); })
-    //     .then((data) => {
-    //         props.setGraphData(data);
-    //     })
-    // }, [props.partBucket]);
-
-    function populate(element) {
-        return props.partBucket.map(data =>
-            React.cloneElement(element, {
-                name: data['strDrink'],
-            }),
-        );
-    }
-
-    return(
-        <Grid item xs={12} md={8} >
-            <Typography variant="h6">
-            Currently simulating:
-            </Typography>
-            <div>
-            <List dense={dense}>
-                {populate(
+    function populate() {
+        return props.partBucket.map(part => {
+            return React.cloneElement(
                 <ListItem>
-                    <ListItemAvatar>
-                    <Avatar>
-                        <FolderIcon />
-                    </Avatar>
-                    </ListItemAvatar>
                     <ListItemText
-                    primary={props.name ? 'Secondary text' : null}
-                    secondary={secondary ? 'Secondary text' : null}
+                    primary={part.title}
+                    secondary={part.group}
                     />
                     <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton edge="end" aria-label="delete" onClick={() => {props.removePart(part.group, part.id)}}>
                         <DeleteIcon />
                     </IconButton>
                     </ListItemSecondaryAction>
                 </ListItem>,
-                )}
+                {
+                    title: part.title,
+                    group: part.group,
+                }
+            )
+        });
+    }
+
+    return(
+        <Grid item xs={12} md={10} >
+            <Typography variant="h6">
+            Currently displaying:
+            </Typography>
+            <div>
+            <List dense={dense}>
+                {populate()}
             </List>
             </div>
         </Grid>

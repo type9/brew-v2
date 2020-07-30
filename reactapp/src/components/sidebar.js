@@ -42,6 +42,7 @@ class Sidebar extends Component{
                     <BucketList
                         partBucket={this.props.partBucket}
                         setGraphData={this.props.setGraphData}
+                        removePart={this.props.removePart}
                     />
                 </BucketContainer>
             </Sidebar>

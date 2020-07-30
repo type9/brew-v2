@@ -9,8 +9,6 @@ from data_stripper.downloader import CocktailDownloader
 from data_stripper.cleaner import DataCleaner
 from data_stripper.grapher import IngredientGraph
 
-app = Flask(__name__)
-
 # Directories
 DATASTRIP_DIR = Path("data_stripper")
 DATA_DIR = Path("data")
@@ -25,8 +23,15 @@ def get_data():
     DataCleaner(DATA_DIR/DATA_FILE, DATA_DIR/CLEANDATA_FILE)
 
 get_data() # intialize and dowload data
-graph = IngredientGraph(DATA_DIR/CLEANDATA_FILE) # create the graph
+graph_options = {
+    'scale': 10,
+    'inverse_weights': True,
+    'similarity': True
+}
+graph = IngredientGraph('data/cleaned_data.bin', **graph_options) # create the graph
 #Initialization of server
+
+app = Flask(__name__)
 
 @app.route("/")
 def index():
@@ -41,10 +46,12 @@ def get_graph():
 @app.route("/api/subgraph", methods=['POST'])
 def get_subgraph():
     nodes = request.get_json(force=True)['nodes']
-    print(nodes)
     subgraph = graph.subgraph(nodes)
-    print(json.dumps(nx.node_link_data(subgraph)))
     return json.dumps(nx.node_link_data(subgraph))
+
+@app.route("/api/similarity", methods =['GET'])
+def get_similarity_table():
+    return graph.similarity_table
 
 @app.route("/healthcheck", methods=['POST'])
 def get_healthcheck():

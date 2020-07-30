@@ -4,6 +4,8 @@ import Nav from "./components/nav";
 import Sidebar from  "./components/sidebar";
 import GraphChart from "./components/chart";
 
+import Part from "./part";
+
 import styled from "styled-components";
 
 class App extends Component{
@@ -11,6 +13,7 @@ class App extends Component{
     super(props);
     this.setGraphData = this.setGraphData.bind(this);
     this.addPart = this.addPart.bind(this);
+    this.removePart = this.removePart.bind(this);
     this.state = {
       graphData: null,
       partBucket: [],
@@ -35,18 +38,13 @@ class App extends Component{
       console.log("No data to update");
       return undefined;
     }
-    console.log("Fetching subgraph");
-    let nodes = [];
-    this.state.partBucket.map(data => {
-      console.log(data);
-      let ingrNum = 1;
-      while(data['strIngredient' + ingrNum]) {
-          nodes.push(data['strIngredient' + ingrNum]);
-          ingrNum += 1;
-      }
+    let nodes = new Set();
+    this.state.partBucket.map(part => { // merged all parts in the bucket into one big union (therefore no duplicates)
+      nodes = part.union(nodes);
     });
-
-    let data = {nodes: nodes};
+    console.log("finished union with: ");
+    console.log(nodes);
+    let data = {nodes: Array.from(nodes)}; // puts into dictionary format
     console.log(data);
     fetch('/api/subgraph', {
       method: "POST",
@@ -62,13 +60,18 @@ class App extends Component{
     this.setState({graphData: data});
   }
 
-  addPart(data) {
-    // this.setState(prevState => ({
-    //   partBucket: [...prevState.partBucket, data]
-    // }), this.updateGraph());
-    let newBucket = this.state.partBucket.concat([data])
+  addPart(part) {
+    this.setState(prevState => ({
+      partBucket: [...prevState.partBucket, part]
+    }), this.updateGraph);
+  }
+
+  removePart(group, id) {
+    let filtered = this.state.partBucket.filter((ele) => {
+      return !((ele.group == group) && (ele.id == id))
+    })
     this.setState({
-      partBucket: newBucket
+      partBucket: filtered,
     }, this.updateGraph);
   }
 
@@ -94,6 +97,7 @@ class App extends Component{
         <Content>
           <Sidebar 
             addPart={this.addPart}
+            removePart={this.removePart}
             partBucket={this.state.partBucket}
             setGraphData={this.setGraphData}
           />
