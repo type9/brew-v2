@@ -21,19 +21,6 @@ function GraphChart(props){
         return window.innerHeight - 60;
     }
 
-    function fetchData(){
-        fetch("/api/graph")
-        .then(res => res.json())
-        .then(
-            (result) => {
-                props.setGraphData(result);
-            },
-            (error) => {
-                console.log(error);
-            }
-        );
-    }
-
     function initGraph(){
         let graphData = props.graphData;
         if(graphData){

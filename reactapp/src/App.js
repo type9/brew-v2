@@ -33,19 +33,14 @@ class App extends Component{
   }
 
   updateGraph(){
-    console.log(this.state.partBucket);
     if(this.state.partBucket.length === 0){
-      console.log("No data to update");
       return undefined;
     }
     let nodes = new Set();
     this.state.partBucket.map(part => { // merged all parts in the bucket into one big union (therefore no duplicates)
       nodes = part.union(nodes);
     });
-    console.log("finished union with: ");
-    console.log(nodes);
     let data = {nodes: Array.from(nodes)}; // puts into dictionary format
-    console.log(data);
     fetch('/api/subgraph', {
       method: "POST",
       body: JSON.stringify(data)
