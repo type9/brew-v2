@@ -7,6 +7,7 @@ class D3Graph {
     svg;
 
     constructor(container, props){
+        //console.log("rendered D3");
         this.container = container;
         this.props = props;
         const { width, height } = props;
@@ -41,7 +42,6 @@ class D3Graph {
             return d => scale(d.group);
         }
 
-        console.log("[D3Graph] Rendering to " + container);
         d3.select(container)
             .append(() => {
                 return this.graph(width, height);
@@ -52,6 +52,7 @@ class D3Graph {
         const {props: { graphData } } = this;
         const links = graphData.links.map(d => Object.create(d));
         const nodes = graphData.nodes.map(d => Object.create(d));
+        const setFocused = this.props.setFocusedItem;
         
         const svg = d3.create("svg")
             .attr("viewBox", [-width / 2, -height / 2, width, height])
@@ -80,7 +81,23 @@ class D3Graph {
           .join("circle")
             .attr("r", 5)
             .attr("fill", d => this.color(d))
-            .call(this.drag(simulation));
+            .call(this.drag(simulation))
+
+          .on('mouseover', function(d ,i) { // Focus effects
+            d3.select(this).transition()
+                .duration('50')
+                .attr('opacity', '0.6');
+
+            setFocused(d.id);
+          })
+
+          .on('mouseout', function(d ,i) { // clear focus
+            d3.select(this).transition()
+                .duration('50')
+                .attr('opacity', '1');
+
+            setFocused(null);
+          });
 
         var text = svg.append("g")
             .attr("class", "labels")

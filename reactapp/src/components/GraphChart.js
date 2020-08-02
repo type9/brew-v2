@@ -1,15 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import D3Graph from "./d3graph";
+import Suggested from "./suggested";
+import styled from "styled-components";
+import { onlyUpdateForKeys } from 'recompose';
 
 let visual = null;
 
-function GraphChart(props){
-    console.log(props);
+const areEqual = (prevProps, nextProps) => {
+    console.log(`${prevProps.graphVersion} -> ${nextProps.graphVersion} = ${prevProps.graphVersion === nextProps.graphVersion}`)
+    return prevProps.graphVersion === nextProps.graphVersion;
+}
+
+function GraphChart(props) {
+    console.log("rendered Chart", props.graphVersion);
+    //console.log(props);
     const refElement = useRef(null);
     const [width, setWidth] = useState(window.innerWidth - 312);
     const [height, setHeight] = useState(window.innerHeight - 60);
 
-    // useEffect(fetchData, []);
     useEffect(handleResizeEvent, []);
     useEffect(initGraph, []);
     useEffect(updateVisualOnResize, [ width, height ]);
@@ -23,13 +31,13 @@ function GraphChart(props){
 
     function initGraph(){
         let graphData = props.graphData;
+        let setFocusedItem = props.setFocusedItem;
         if(graphData){
-            console.log("initializing graph with data: ");
-            console.log(graphData);
             const d3props = {
                 graphData,
                 width,
-                height
+                height,
+                setFocusedItem,
             };
             visual = new D3Graph(refElement.current, d3props);
         }
@@ -58,9 +66,15 @@ function GraphChart(props){
 
     return (
         <div className="chart-container">
-            <div id = "graph-container" ref={refElement}/>
+            <Suggested
+                suggestedItems={props.suggestedItems}
+            />
+            <div
+                id="graph-container"
+                ref={refElement}
+            />
         </div>
     );
 }
-    
-export default GraphChart;
+
+export default onlyUpdateForKeys(['graphVersion'])(GraphChart);

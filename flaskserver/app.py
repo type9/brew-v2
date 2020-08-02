@@ -49,9 +49,15 @@ def get_subgraph():
     subgraph = graph.subgraph(nodes)
     return json.dumps(nx.node_link_data(subgraph))
 
-@app.route("/api/similarity", methods =['GET'])
+@app.route("/api/similaritytable", methods=['GET'])
 def get_similarity_table():
     return graph.similarity_table
+
+@app.route("/api/similarity", methods=['POST'])
+def get_smiliarity():
+    nodes = request.get_json(force=True)['nodes']
+    return json.dumps(graph.suggest_similar(nodes)[:5])
+
 
 @app.route("/healthcheck", methods=['POST'])
 def get_healthcheck():

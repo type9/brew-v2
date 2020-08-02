@@ -16,22 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import styled from "styled-components";
 import PartSearch from './partsearch';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 3,
-        maxWidth: 752,
-    },
-    demo: {
-        backgroundColor: theme.palette.background.paper,
-    },
-    title: {
-        margin: theme.spacing(4, 0, 2),
-    }
-}));
-
 function BucketList(props){
-    const classes = useStyles();
-    const [dense, setDense] = useState(false);
 
     function populate() {
         return props.partBucket.map(part => {
@@ -56,12 +41,9 @@ function BucketList(props){
     }
 
     return(
-        <Grid item xs={12} md={10} >
-            <Typography variant="h6">
-            Currently displaying:
-            </Typography>
+        <Grid item md={8} >
             <div>
-            <List dense={dense}>
+            <List>
                 {populate()}
             </List>
             </div>

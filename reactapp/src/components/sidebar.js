@@ -29,6 +29,7 @@ class Sidebar extends Component{
         const BucketContainer = styled.div`
             padding: 18px 6px 6px 6px;
             width: 100%;
+            overflow: scroll;
         `;
 
         return(

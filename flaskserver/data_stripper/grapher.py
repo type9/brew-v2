@@ -90,14 +90,27 @@ class IngredientGraph(nx.Graph):
 
                 sum = 0
                 num_weights = 0
-                for node in junction:
-                    sum += 1/self[node][a]['weight']
-                    sum += 1/self[node][b]['weight']
-                    num_weights += 1
 
-                modifier = 1
-                # score = math.pow(math.e, math.pow(sum, 2))
-                score = sum
+                shared_sum = 0
+                for node in junction:
+                    # modifier = 1/math.pow(len(self[node].items()), 2)
+                    shared_sum += (self[node][a]['weight'])
+                    shared_sum += (self[node][b]['weight'])
+                    num_weights += 1
+                
+                total_sum = 0
+                for node in self[a].items():
+                    total_sum += node[1]['weight']
+                for node in self[b].items():
+                    total_sum += node[1]['weight']
+                
+
+
+                param_a = 15
+                param_c = 45
+                x = sum
+                # score = ( (-1) / (1 + math.pow(math.e, (-1 * param_a)(x - param_c) ) + 1
+                score = shared_sum/total_sum
 
                 # this section handles lookup table update
                 if a in table: # see if we already have a in table
@@ -118,12 +131,31 @@ class IngredientGraph(nx.Graph):
             iter += 1 # increase interation counter
 
         entries = table.keys()
-        for entry in entries:
+        for entry in entries: # converts internal tables into sorted arrays sorted by descending score
             subtable = table[entry]
             table[entry] = sorted(subtable.items(), key=lambda x: x[1], reverse=True)
 
         self.similarity_table = table
+    
+    def suggest_similar(self, nodes):
+        suggest_table = {}
 
+        for node in nodes:
+            for other_node in self.similarity_table[node]: # for each score for that node
+                if node[1] == 0: #catches 0 scores and ignores them
+                    continue
+
+                if other_node[0] in suggest_table: # see if its in the running table
+                    suggest_table[other_node[0]] += other_node[1]
+                else: # if not add it
+                    suggest_table[other_node[0]] = other_node[1]
+
+        for node in nodes: # removes the nodes in question from the table
+            if node in suggest_table:
+                suggest_table.pop(node)
+
+        return sorted(suggest_table.items(), key=lambda x: x[1], reverse=True) # sort by descending score and return
+                    
 def main():
     import matplotlib.pyplot as plt
     import os
