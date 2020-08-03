@@ -27,7 +27,7 @@ class Sidebar extends Component{
         `;
 
         const BucketContainer = styled.div`
-            padding: 0px 6px 6px 6px;
+            padding: 0px 0px 0px 6px;
             width: 100%;
         `;
 

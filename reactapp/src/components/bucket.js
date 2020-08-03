@@ -23,7 +23,7 @@ function BucketList(props){
     function populate() {
         return props.partBucket.map(part => {
             return React.cloneElement(
-                <ListItem width={288}>
+                <ListItem width={286}>
                     <ListItemText
                     primary={part.title}
                     secondary={part.group}

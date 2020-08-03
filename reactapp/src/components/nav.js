@@ -75,7 +75,7 @@ class Nav extends Component{
                         <NavLogoWrap>
                             <img src={logo} alt='twist logo' width={50} height={50}/>
                         </NavLogoWrap>
-                        <NavBrand>TWIST</NavBrand>
+                        <NavBrand href="/">TWIST</NavBrand>
                     </NavWrapLeft>
                     <NavWrapCenter>
                         <NavWrapLinks>
