@@ -1,26 +1,24 @@
 import React, { useState, useEffect, useRef} from 'react';
 import D3Graph from "./d3graph";
 import Suggested from "./suggested";
-import styled from "styled-components";
-import { onlyUpdateForKeys } from 'recompose';
+import PartCard from "./partcard";
 
 let visual = null;
 
-const areEqual = (prevProps, nextProps) => {
-    console.log(`${prevProps.graphVersion} -> ${nextProps.graphVersion} = ${prevProps.graphVersion === nextProps.graphVersion}`)
-    return prevProps.graphVersion === nextProps.graphVersion;
-}
-
 function GraphChart(props) {
-    console.log("rendered Chart", props.graphVersion);
-    //console.log(props);
     const refElement = useRef(null);
     const [width, setWidth] = useState(window.innerWidth - 312);
     const [height, setHeight] = useState(window.innerHeight - 60);
 
+    const [graphData, setGraphData] = useState(null);
+    const [graphVersion, setGraphVersion] = useState(0);
+    const [focusedItem, setFocusedItem] = useState(null);
+    const [suggestedItems, setSuggestedItems] = useState([]);
+
+    useEffect(updateGraphData, []);
     useEffect(handleResizeEvent, []);
-    useEffect(initGraph, []);
     useEffect(updateVisualOnResize, [ width, height ]);
+    
 
     function getWidth(){
         return window.innerWidth - 312;
@@ -29,18 +27,58 @@ function GraphChart(props) {
         return window.innerHeight - 60;
     }
 
-    function initGraph(){
-        let graphData = props.graphData;
-        let setFocusedItem = props.setFocusedItem;
+    // useEffect(()=>{
+    //     fetch("/api/graph")
+    //     .then(res => res.json())
+    //     .then(
+    //         (result) => {
+    //             setGraphData(result);
+    //             setGraphVersion(graphVersion + 1);
+    //         },
+    //         (error) => {
+    //             console.log(error);
+    //         });
+    // },[]);
+
+    function initVisual(graphData, setFocusedItem){
         if(graphData){
+            graphData = graphData;
+            setFocusedItem = setFocusedItem;
             const d3props = {
                 graphData,
                 width,
                 height,
                 setFocusedItem,
             };
+            console.log("new chart")
             visual = new D3Graph(refElement.current, d3props);
         }
+    }
+    
+    function updateGraphData(){
+        if(props.partBucket.length === 0){
+          return undefined;
+        }
+        let nodes = new Set();
+        props.partBucket.map(part => { // merged all parts in the bucket into one big union (therefore no duplicates)
+          nodes = part.union(nodes);
+        });
+        let data = {nodes: Array.from(nodes)}; // puts into dictionary format
+        fetch('/api/subgraph', {
+          method: "POST",
+          body: JSON.stringify(data)
+        })
+        .then((response) => { return response.json(); })
+        .then(data => initVisual(data, setFocusedItem));
+    
+        fetch('/api/similarity', { //updates suggested items as well
+          method: "POST",
+          body: JSON.stringify(data)
+        })
+        .then((response) => { return response.json(); })
+        .then((data) => {
+          setSuggestedItems(data);
+        })
     }
 
     function handleResizeEvent() {
@@ -67,7 +105,10 @@ function GraphChart(props) {
     return (
         <div className="chart-container">
             <Suggested
-                suggestedItems={props.suggestedItems}
+                suggestedItems={suggestedItems}
+            />
+            <PartCard
+                focusedItem={focusedItem}
             />
             <div
                 id="graph-container"
@@ -77,4 +118,4 @@ function GraphChart(props) {
     );
 }
 
-export default onlyUpdateForKeys(['graphVersion'])(GraphChart);
+export default GraphChart;
