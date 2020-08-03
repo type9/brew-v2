@@ -1,6 +1,7 @@
-import React, {Component} from "react"
-
-import styled from "styled-components"
+import React, {Component} from "react";
+import styled from "styled-components";
+import logo from '../logo.svg';
+import githubmark from '../githubmark.png';
 
 class Nav extends Component{
     render() {
@@ -27,10 +28,12 @@ class Nav extends Component{
         `;
         const NavWrapRight = styled(NavWrap)`
             justify-content: end;
+            padding-right: ${props => props.theme.spc_2};
         `;
         const NavWrapLinks = styled(NavWrap)`
             flex: 0 0 auto;
         `;
+
         const NavLink = styled.a`
             display: inline-block;
             line-height: calc(60px - 4px);
@@ -57,6 +60,9 @@ class Nav extends Component{
             border-bottom: 4px solid ${props => props.theme.secondary};
         `;
         const NavBrand = styled(NavLink)`
+            margin-left: ${props => props.theme.spc_1};
+        `;
+        const NavLogoWrap = styled.div`
             margin-left: ${props => props.theme.spc_4};
         `;
         //LINKS
@@ -66,16 +72,21 @@ class Nav extends Component{
             <Nav>
                 <NavWrap>
                     <NavWrapLeft>
+                        <NavLogoWrap>
+                            <img src={logo} alt='twist logo' width={50} height={50}/>
+                        </NavLogoWrap>
                         <NavBrand>TWIST</NavBrand>
                     </NavWrapLeft>
                     <NavWrapCenter>
                         <NavWrapLinks>
                             <NavLinkActive href="/">EXPLORE</NavLinkActive>
-                            <NavLink href="/guide">GUIDE</NavLink>
+                            {/* <NavLink href="/guide">GUIDE</NavLink> */}
                         </NavWrapLinks>
                     </NavWrapCenter>
                     <NavWrapRight>
-                        <NavLink href={gitLink}>GIT</NavLink>
+                        <a href={gitLink}>
+                            <img src={githubmark} alt='github mark' width={30} height={30}/>
+                        </a>
                     </NavWrapRight>
                 </NavWrap>
             </Nav>

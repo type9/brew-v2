@@ -21,10 +21,11 @@ function BucketList(props){
     function populate() {
         return props.partBucket.map(part => {
             return React.cloneElement(
-                <ListItem>
+                <ListItem width={288}>
                     <ListItemText
                     primary={part.title}
                     secondary={part.group}
+                    marginLeft={0}
                     />
                     <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete" onClick={() => {props.removePart(part.group, part.id)}}>
@@ -41,7 +42,7 @@ function BucketList(props){
     }
 
     return(
-        <Grid item md={8} >
+        <Grid>
             <div>
             <List>
                 {populate()}

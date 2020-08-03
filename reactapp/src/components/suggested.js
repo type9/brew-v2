@@ -8,10 +8,6 @@ import Typography from '@material-ui/core/Typography';
 
 function Suggested(props){
     function populate(){
-        if(!props.suggestedItems) {
-            return "";
-        }
-
         return props.suggestedItems.map(ingr =>{
             return (
                 <ListItem>
@@ -23,16 +19,27 @@ function Suggested(props){
     const Suggested = styled.div`
         position: absolute;
         top: 60px;
-        left: 312px;
+        left: 300px;
         margin-top: 6px;
         margin-left: 6px;
+        width: 200px;
         border-radius: 3px;
         background-color: ${props => props.theme.fg};
     `;
 
+    const HeaderWrap = styled.div`
+        margin-left: 10px;
+    `;
+    if(props.suggestedItems.length == 0) {
+        return null;
+    }
+
     return(
         <Suggested>
             <List dense={true}>
+                <HeaderWrap>
+                    <Typography variant="h6" color="textSecondary">Suggested</Typography>
+                </HeaderWrap>
                 {populate()}
             </List>
         </Suggested>

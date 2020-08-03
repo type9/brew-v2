@@ -83,7 +83,7 @@ function PartSearch(props){
     return (
         <Autocomplete
             id="part-search"
-            style={{ width: 300 }}
+            style={{ width: 288 }}
             onChange={handleSelection}
             getOptionLabel={(option) => option.title}
             options={groupOptions(options)}
@@ -93,7 +93,7 @@ function PartSearch(props){
             renderInput={params => (
                 <TextField
                     {...params}
-                    label="Search for a cocktail or ingredient"
+                    label="Search for Ingredient or Cocktail"
                     variant="outlined"
                     fullWidth
                     onChange={handleChange}

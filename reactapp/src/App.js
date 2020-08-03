@@ -3,17 +3,8 @@ import React, {useState, useEffect, useRef} from "react";
 import Nav from "./components/nav";
 import Sidebar from  "./components/sidebar";
 import GraphChart from "./components/GraphChart";
-import PartCard from "./components/partcard";
 
 import styled from "styled-components";
-
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
 
 function App(){
   const [partBucket, setPartBucket] = useState([]);
@@ -37,7 +28,7 @@ function App(){
 
   const Content = styled.div`
     display: grid;
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: 300px calc(100vw - 300px);
     width: 100%;
   `;
   
