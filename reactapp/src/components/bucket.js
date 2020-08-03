@@ -3,20 +3,22 @@ import React, {useState, useEffect, cloneElement} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FolderIcon from '@material-ui/icons/Folder';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import styled from "styled-components";
-import PartSearch from './partsearch';
+const useStyles = makeStyles({
+    root: {
+        height: 'calc(100vh - 126px)',
+        overflow: 'scroll',
+    },
+});
 
 function BucketList(props){
+    const classes = useStyles();
 
     function populate() {
         return props.partBucket.map(part => {
@@ -42,7 +44,7 @@ function BucketList(props){
     }
 
     return(
-        <Grid>
+        <Grid className={classes.root}>
             <div>
             <List>
                 {populate()}
