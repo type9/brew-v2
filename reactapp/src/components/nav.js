@@ -80,7 +80,7 @@ class Nav extends Component{
                     <NavWrapCenter>
                         <NavWrapLinks>
                             <NavLinkActive href="/">EXPLORE</NavLinkActive>
-                            <NavLink href="https://docs.google.com/document/d/19zBG6jBr9OLV41l279aQZU2XZ7ffnZ-fYobrdh5ccDw/edit?usp=sharing">
+                            <NavLink href="https://docs.google.com/document/d/e/2PACX-1vSb6qoMlsxnLS-edsfmB89NBncXI44KPgbgMzAvCLgZdXwWed2bQ_Rv5SFy-LBjz0FCvLrBkc6JNNpc/pub">
                                 GUIDE/FEEDBACK
                             </NavLink>
                         </NavWrapLinks>
