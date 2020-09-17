@@ -1,4 +1,4 @@
-Exported using Docs to Markdown. Some sections are missing images. See [this doc](https://docs.google.com/document/d/19zBG6jBr9OLV41l279aQZU2XZ7ffnZ-fYobrdh5ccDw/edit?usp=sharing) for more the most up to date explanation of the alpha w/ images.
+-> Please see [this doc](https://docs.google.com/document/d/19zBG6jBr9OLV41l279aQZU2XZ7ffnZ-fYobrdh5ccDw/edit?usp=sharing) for images
 
 ## TWIST Alpha Overview - [LIVE](https://alpha.twist.run/)
 
