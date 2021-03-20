@@ -4,10 +4,14 @@ import Nav from "./components/nav";
 import Sidebar from  "./components/sidebar";
 import GraphChart from "./components/GraphChart";
 
+import Part from "./part";
+import DefaultDrink from  "./default-data.json";
+
 import styled from "styled-components";
 
 function App(){
-  const [partBucket, setPartBucket] = useState([]);
+  let defaultDrink = new Part(DefaultDrink["drinks"][0])
+  const [partBucket, setPartBucket] = useState([defaultDrink]);
 
   function addPart(part) {
     setPartBucket([...partBucket, part])
